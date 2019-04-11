@@ -31,11 +31,29 @@ def get_articles():
     articles = soup.find_all('article')
 
     article_urls = []
-    # iterate over the list of articles, extract their urls and store them in the list
+    # iterate over the list of articles
     for article in articles:
+        # extract their urls
         href = article.header.h2.a.get('href').replace('/blog/', '')
         article_url = ''.join([domain, href])
+        # store them in the list
         article_urls.append(article_url)
+
+    while True:
+        try:
+            href_container = soup.find('a', class_='older-posts')
+            href = href_container.get('href').replace('/blog/', '')
+            next_url = ''.join([domain, href])
+        except AttributeError:
+            break
+
+        if next_url:
+            soup = BeautifulSoup(get_url(next_url), 'html.parser')
+            articles = soup.find_all('article')
+            for article in articles:
+                href = article.header.h2.a.get('href').replace('/blog/', '')
+                article_url = ''.join([domain, href])
+                article_urls.append(article_url)
 
     print(article_urls)
 
