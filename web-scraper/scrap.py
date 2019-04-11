@@ -2,8 +2,6 @@ from contextlib import closing
 from requests import get
 from bs4 import BeautifulSoup
 
-url = 'https://teonite.com/blog/'
-
 def is_good_response(response):
     """Check if the given url appears to be an html doctype and check the
     status code returned with the response.
@@ -24,7 +22,6 @@ def get_articles():
     """Get urls of all articles found on the first page and all consecutive
     pages.
     """
-
     domain = 'https://teonite.com/blog/'
     # find all the article tags from the first page
     soup = BeautifulSoup(get_url(domain), 'html.parser')
@@ -40,6 +37,7 @@ def get_articles():
         article_urls.append(article_url)
 
     while True:
+        # infinite loop that finds all the consecutive pages and it's articles
         try:
             href_container = soup.find('a', class_='older-posts')
             href = href_container.get('href').replace('/blog/', '')
@@ -55,6 +53,28 @@ def get_articles():
                 article_url = ''.join([domain, href])
                 article_urls.append(article_url)
 
-    print(article_urls)
+    return article_urls
 
-get_articles()
+def get_soup_pot():
+    """Create a list with the contents of each article's page."""
+    article_urls = get_articles()
+    soup_pot = []
+    for url in article_urls:
+        soup = BeautifulSoup(get_url(url), 'html.parser')
+        soup_pot.append(soup)
+
+    return soup_pot
+
+def get_authors(soup_pot):
+    """Extract the author's name from each article"""
+    authors = []
+    for soup in soup_pot:
+        author_container = soup.find('span', class_='author-content')
+        author = author_container.h4.text
+        authors.append(author)
+
+    return authors
+
+soup_pot = get_soup_pot()
+authors = get_authors(soup_pot)
+print(authors)
