@@ -58,10 +58,8 @@ def get_articles():
 def get_soup_pot():
     """Create a list with the contents of each article's page."""
     article_urls = get_articles()
-    soup_pot = []
-    for url in article_urls:
-        soup = BeautifulSoup(get_url(url), 'html.parser')
-        soup_pot.append(soup)
+    soup_pot = [BeautifulSoup(get_url(url), 'html.parser')
+        for url in article_urls]
 
     return soup_pot
 
@@ -73,7 +71,10 @@ def get_authors(soup_pot):
         author = author_container.h4.text
         authors.append(author)
 
-    return authors
+    unique_authors = list(set(authors))
+    author_ids = [author.replace(' ', '').lower() for author in unique_authors]
+
+    return dict(zip(unique_authors, author_ids))
 
 soup_pot = get_soup_pot()
 authors = get_authors(soup_pot)
