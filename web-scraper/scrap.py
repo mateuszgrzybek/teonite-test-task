@@ -74,8 +74,26 @@ def get_authors(soup_pot):
     unique_authors = list(set(authors))
     author_ids = [author.replace(' ', '').lower() for author in unique_authors]
 
-    return dict(zip(unique_authors, author_ids))
+    return dict(zip(author_ids, unique_authors))
+
+def get_words(authors, soup_pot):
+    author_ids = [k for k,v in authors.items()]
+    author_names = [v for k,v in authors.items()]
+
+    personal_words = dict.fromkeys(author_names)
+
+    for k,v in personal_words.items():
+        words = []
+        for soup in soup_pot:
+            author_container = soup.find('span', class_='author-content')
+            soup_author = author_container.h4.text
+            if k == soup_author:
+                header = soup.find('h1', class_='post-title').text
+                words.append(header)
+                print(header)
+
+
 
 soup_pot = get_soup_pot()
 authors = get_authors(soup_pot)
-print(authors)
+get_words(authors, soup_pot)
