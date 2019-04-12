@@ -88,12 +88,21 @@ def get_words(authors, soup_pot):
             author_container = soup.find('span', class_='author-content')
             soup_author = author_container.h4.text
             if k == soup_author:
+                # get words from header
                 header = soup.find('h1', class_='post-title').text
-                words.append(header)
-                print(header)
+                words.append(header.split())
+                paragraphs = soup.find('section', class_='post-content').text
+                words.append(paragraphs.replace('\n', ' ').split())
+        personal_words[k] = [word for sublist in words for word in sublist]
+
+    return personal_words
+
+
+
 
 
 
 soup_pot = get_soup_pot()
 authors = get_authors(soup_pot)
-get_words(authors, soup_pot)
+personal_words = get_words(authors, soup_pot)
+print(personal_words['Andrzej Piasecki'])
