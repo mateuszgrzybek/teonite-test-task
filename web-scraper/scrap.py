@@ -1,9 +1,8 @@
-from contextlib import closing
 from requests import get
 from bs4 import BeautifulSoup
 
+from contextlib import closing
 import string
-import re
 
 def is_good_response(response):
     """Check if the given url appears to be an html doctype and check the
