@@ -149,6 +149,7 @@ def words_per_author(personal_words):
 
 def total_words(personal_words):
     """Return a dictionary containing top 10 words on the blog."""
+    # combine each author's words to one huge list
     all_words = [word for k,v in personal_words.items() for word in v]
 
     return dict((tuple[0], tuple[1])
@@ -160,4 +161,4 @@ personal_words = get_words(authors, soup_pot)
 words_per_author = words_per_author(personal_words)
 all_words = total_words(personal_words)
 print(all_words)
-# print(all_words)
+print(words_per_author)
