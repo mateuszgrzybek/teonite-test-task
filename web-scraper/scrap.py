@@ -85,7 +85,8 @@ def word_cleanup(words):
     """
     # a mapping table to create replacement pairs
     mapping_table = str.maketrans('', '', string.punctuation)
-    stop_words = ['i', 'oraz', 'lub', 'w', 'z', 'a', 'and', 'but', 'or']
+    stop_words = ['i', 'oraz', 'lub', 'w', 'z', 'a', 'and', 'but', 'or', 'the',
+        'of', 'to']
 
     stripped = [word.translate(mapping_table) for word in words]
 
@@ -125,23 +126,41 @@ def get_words(authors, soup_pot):
         for k, v in personal_words.items())
 
 def words_per_author(personal_words):
-
+    """Return a dictionary containing top 10 words for each author."""
+    # an empty dict to store authors and their top words with their count
+    words_per_author = dict()
     for k,v in personal_words.items():
+        # create a Counter type dictionary to store the wordcount
         word_count = Counter()
         for word in v:
             word_count[word] = v.count(word)
-        personal_words[k] = word_count.most_common(10)
+        # use Counter's most_common() method to get the 10 most occuring words
+        words_per_author[k] = word_count.most_common(10)
 
-    for k,v in personal_words.items():
+    for k,v in words_per_author.items():
+        # this loop basically converts the lists of tuples in values to simple
+        # dicts
         word_count = dict()
         for tuple in v:
             word_count[tuple[0]] = tuple[1]
-        personal_words[k] = word_count
+        words_per_author[k] = word_count
 
-    return personal_words
+    return words_per_author
+
+def total_words(personal_words):
+    """Return a dictionary containing top 10 words on the blog."""
+    all_words = []
+    for k,v in personal_words.items():
+        for word in v:
+            all_words.append(word)
+
+    return dict((tuple[0], tuple[1])
+        for tuple in Counter(all_words).most_common(10))
 
 soup_pot = get_soup_pot()
 authors = get_authors(soup_pot)
 personal_words = get_words(authors, soup_pot)
 words_per_author = words_per_author(personal_words)
-print(words_per_author)
+all_words = total_words(personal_words)
+print(all_words)
+# print(all_words)
