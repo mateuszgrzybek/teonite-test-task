@@ -14,5 +14,13 @@ class WordsPerAuthor(models.Model):
     word_count = models.IntegerField()
 
     class Meta:
-        ordering = ('-word_count-')
+        ordering = ('-word_count')
         db_table = 'personal_words'
+
+class TotalWords(models.Model):
+    word = models.CharField(maxlength=50)
+    word_count = models.IntegerField()
+
+    class Meta:
+        ordering = ('-word_count')
+        db_table 'total_words'
