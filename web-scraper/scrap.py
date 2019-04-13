@@ -2,6 +2,7 @@ from requests import get
 from bs4 import BeautifulSoup
 
 from contextlib import closing
+from collections import Counter
 import string
 
 def is_good_response(response):
@@ -123,6 +124,24 @@ def get_words(authors, soup_pot):
     return dict((k.lower().replace(' ', ''), v)
         for k, v in personal_words.items())
 
+def words_per_author(personal_words):
+
+    for k,v in personal_words.items():
+        word_count = Counter()
+        for word in v:
+            word_count[word] = v.count(word)
+        personal_words[k] = word_count.most_common(10)
+
+    for k,v in personal_words.items():
+        word_count = dict()
+        for tuple in v:
+            word_count[tuple[0]] = tuple[1]
+        personal_words[k] = word_count
+
+    return personal_words
+
 soup_pot = get_soup_pot()
 authors = get_authors(soup_pot)
 personal_words = get_words(authors, soup_pot)
+words_per_author = words_per_author(personal_words)
+print(words_per_author)
