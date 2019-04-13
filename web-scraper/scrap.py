@@ -149,10 +149,7 @@ def words_per_author(personal_words):
 
 def total_words(personal_words):
     """Return a dictionary containing top 10 words on the blog."""
-    all_words = []
-    for k,v in personal_words.items():
-        for word in v:
-            all_words.append(word)
+    all_words = [word for k,v in personal_words.items() for word in v]
 
     return dict((tuple[0], tuple[1])
         for tuple in Counter(all_words).most_common(10))
