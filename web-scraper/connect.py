@@ -1,7 +1,7 @@
-import os
+import sys, os
 import psycopg2
 
-from ../web-scraper/scrap import get_soup_pot, get_authors, get_words
+from scrap import get_soup_pot, get_authors, get_words
 
 db_params = {'database': os.environ.get('DB_NAME', ''),
              'host': os.environ.get('DB_HOST', ''),

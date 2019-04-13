@@ -1,3 +1,5 @@
 # virtualenvs
 web-scraper/venv
-database/venv
+
+# pycaches
+web-scraper/__pycache__
