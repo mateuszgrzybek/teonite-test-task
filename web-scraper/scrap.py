@@ -2,6 +2,9 @@ from contextlib import closing
 from requests import get
 from bs4 import BeautifulSoup
 
+import string
+import re
+
 def is_good_response(response):
     """Check if the given url appears to be an html doctype and check the
     status code returned with the response.
@@ -64,7 +67,7 @@ def get_soup_pot():
     return soup_pot
 
 def get_authors(soup_pot):
-    """Extract the author's name from each article"""
+    """Extract the author's name from each article."""
     authors = []
     for soup in soup_pot:
         author_container = soup.find('span', class_='author-content')
@@ -76,33 +79,51 @@ def get_authors(soup_pot):
 
     return dict(zip(author_ids, unique_authors))
 
-def get_words(authors, soup_pot):
-    author_ids = [k for k,v in authors.items()]
-    author_names = [v for k,v in authors.items()]
+def word_cleanup(words):
+    """Clean up the extracted words, removing any unnecessary punctuation
+    and unmeaningful words.
+    """
+    # a mapping table to create replacement pairs
+    mapping_table = str.maketrans('', '', string.punctuation)
+    stop_words = ['i', 'oraz', 'lub', 'w', 'z', 'a', 'and', 'but', 'or']
 
+    stripped = [word.translate(mapping_table) for word in words]
+
+    for word in stripped:
+        for stop_word in stop_words:
+            if stop_word == word:
+                stripped.remove(word)
+
+    for word in stripped:
+        if len(word) < 2:
+            stripped.remove(word)
+        elif word.startswith('http'):
+            stripped.remove(word)
+
+    return stripped
+
+def get_words(authors, soup_pot):
+    """Get each authors words from all the articles written by them."""
+    author_names = [v for k,v in authors.items()]
     personal_words = dict.fromkeys(author_names)
 
     for k,v in personal_words.items():
-        words = []
+        words_raw = []
         for soup in soup_pot:
             author_container = soup.find('span', class_='author-content')
             soup_author = author_container.h4.text
             if k == soup_author:
                 # get words from header
                 header = soup.find('h1', class_='post-title').text
-                words.append(header.split())
+                words_raw.append(header.replace('\n', ' ').split())
                 paragraphs = soup.find('section', class_='post-content').text
-                words.append(paragraphs.replace('\n', ' ').split())
-        personal_words[k] = [word for sublist in words for word in sublist]
+                words_raw.append(paragraphs.replace('\n', ' ').split())
+        words = [str(word) for sublist in words_raw for word in sublist]
+        personal_words[k] = word_cleanup(words)
 
-    return personal_words
-
-
-
-
-
+    return dict((k.lower().replace(' ', ''), v)
+        for k, v in personal_words.items())
 
 soup_pot = get_soup_pot()
 authors = get_authors(soup_pot)
 personal_words = get_words(authors, soup_pot)
-print(personal_words['Andrzej Piasecki'])
