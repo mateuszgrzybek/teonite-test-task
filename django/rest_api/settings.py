@@ -32,9 +32,6 @@ DEBUG = DEBUG_ENV
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'l=za4x4@!9ik+e#-3&r)3_$+my+ozlnu!8uj^q1ca#pjf7rw41'
 
-ALLOWED_HOSTS = []
-
-
 # Application definition
 
 INSTALLED_APPS = [
