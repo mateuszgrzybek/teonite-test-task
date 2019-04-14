@@ -16,16 +16,15 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # variables
-DB_NAME = os.environ.get('DB_NAME', '')
-DB_HOST = os.environ.get('DB_HOST', '')
-DB_USER = os.environ.get('DB_USER', '')
-DB_PASSWORD = os.environ.get('DB_PASSWORD', '')
-DB_PORT = os.environ.get('DB_PORT', '')
-ALLOWED_HOST = os.environ.get('ALLOWED_HOSTS', '')
-ALLOWED_HOSTS = [ALLOWED_HOST]
-DEBUG_ENV = os.environ.get('DEBUG_VAR', '')
-DEBUG = DEBUG_ENV
-
+# DB_NAME = os.environ.get('DB_NAME', '')
+# DB_HOST = os.environ.get('DB_HOST', '')
+# DB_USER = os.environ.get('DB_USER', '')
+# DB_PASSWORD = os.environ.get('DB_PASSWORD', '')
+# DB_PORT = os.environ.get('DB_PORT', '')
+# ALLOWED_HOST = os.environ.get('ALLOWED_HOSTS', '')
+ALLOWED_HOSTS = []
+# DEBUG_ENV = os.environ.get('DEBUG_VAR', '')
+DEBUG = True
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
@@ -41,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'djangorestframework',
+    'rest_framework',
     'app',
 ]
 
@@ -82,11 +81,11 @@ WSGI_APPLICATION = 'rest_api.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': DB_NAME,
-        'USER': DB_USER,
-        'HOST': DB_HOST,
-        'PORT': DB_PORT,
-        'PASSWORD': DB_PASSWORD,
+        'NAME': 'restapidevelopment',
+        'USER': 'mateuszgrzybek',
+        'HOST': 'localhost',
+        'PORT': '',
+        'PASSWORD': '',
     }
 }
 
