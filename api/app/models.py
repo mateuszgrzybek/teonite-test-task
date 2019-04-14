@@ -9,7 +9,7 @@ class Authors(models.Model):
         db_table = 'authors'
 
 class WordsPerAuthor(models.Model):
-    author_id = models.CharField(primary_key=True, max_length=50)
+    author_id = models.CharField(max_length=50)
     word = models.CharField(max_length=50)
     word_count = models.IntegerField()
 

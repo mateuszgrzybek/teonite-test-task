@@ -20,7 +20,7 @@ soup_pot = get_soup_pot()
 authors = get_authors(soup_pot)
 
 def connect(db_params, authors, soup_pot):
-    words = get_words(authors, soup_pot)
+    # words = get_words(authors, soup_pot)
     conn = None
     try:
         # connect to the database
@@ -36,12 +36,19 @@ def connect(db_params, authors, soup_pot):
         cursor.execute('DELETE FROM total_words')
 
         # insert scraped stats into the corresponding tables
-        for author_id, author_name in authors.itmes():
-            cursor.execute("""INSERT INTO (author_id, author_name)
-                authors VALUES ({}, {})""".format(author_id, author_name))
+        for author_id, author_name in authors.items():
+            cursor.execute("""INSERT INTO authors (author_id, author_name)
+                VALUES ('{}', '{}')""".format(author_id, author_name))
 
+        # commit the changes and close the connection
         conn.commit()
-        cur.close()
+        cursor.close()
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+    finally:
+        if conn is not None:
+            conn.close()
+            print('Connection closed.')
 
 
 # def initial_insert(db_params, authors, soup_pot):
@@ -76,4 +83,4 @@ def connect(db_params, authors, soup_pot):
 #             print('Database connection closed.')
 
 if __name__ == "__main__":
-    initial_insert(db_params, authors, soup_pot)
+    connect(db_params, authors, soup_pot)

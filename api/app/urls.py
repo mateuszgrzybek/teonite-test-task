@@ -3,9 +3,9 @@ from .views import AuthorsView
 from rest_framework import routers
 
 router = routers.DefaultRouter()
-router.register('authors', AuthorsView)
+# router.register('authors', AuthorsView)
 
 urlpatterns = [
     path('', include(router.urls)),
-    # path('authors/', include(AuthorsView.as_view(), name='authors')
+    path('authors/', AuthorsView.as_view(), name='authors')
 ]
