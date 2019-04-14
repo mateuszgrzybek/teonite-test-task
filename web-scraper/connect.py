@@ -3,11 +3,17 @@ import psycopg2
 
 from scrap import get_soup_pot, get_authors, get_words
 
-db_params = {'database': os.environ.get('DB_NAME', ''),
-             'host': os.environ.get('DB_HOST', ''),
-             'user': os.environ.get('DB_USER', ''),
-             'password': os.environ.get('DB_PASSWORD', ''),
-             'port': os.environ.get('DB_PORT', ''),
+# db_params = {'database': os.environ.get('DB_NAME', ''),
+#              'host': os.environ.get('DB_HOST', ''),
+#              'user': os.environ.get('DB_USER', ''),
+#              'password': os.environ.get('DB_PASSWORD', ''),
+#              'port': os.environ.get('DB_PORT', ''),
+#             }
+db_params = {'database': 'restapidevelopment',
+             'host': 'localhost',
+             'user': 'mateuszgrzybek',
+             'password': '',
+             'port': '',
             }
 
 soup_pot = get_soup_pot()
@@ -23,6 +29,19 @@ def connect(db_params, authors, soup_pot):
 
         # create a cursor
         cursor = conn.cursor()
+
+        # delete any existing records
+        cursor.execute('DELETE FROM authors')
+        cursor.execute('DELETE FROM personal_words')
+        cursor.execute('DELETE FROM total_words')
+
+        # insert scraped stats into the corresponding tables
+        for author_id, author_name in authors.itmes():
+            cursor.execute("""INSERT INTO (author_id, author_name)
+                authors VALUES ({}, {})""".format(author_id, author_name))
+
+        conn.commit()
+        cur.close()
 
 
 # def initial_insert(db_params, authors, soup_pot):

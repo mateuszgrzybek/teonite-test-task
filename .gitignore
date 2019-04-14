@@ -1,6 +1,6 @@
 # virtualenvs
 web-scraper/venv
-django/venv
+api/venv
 
 # pycaches
 web-scraper/__pycache__
