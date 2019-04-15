@@ -5,3 +5,4 @@ api/venv
 # pycaches
 web-scraper/__pycache__
 api/app/__pycache__
+api/app/migrations/__pycache__
