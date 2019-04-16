@@ -23,6 +23,7 @@ authors = get_authors(soup_pot)
 def connect(db_params, authors, soup_pot):
     words = get_words(authors, soup_pot)
     personal_words = words_per_author(words)
+    total_words = total_words(words)
     conn = None
     try:
         # connect to the database
@@ -41,6 +42,11 @@ def connect(db_params, authors, soup_pot):
         for author_id, author_name in authors.items():
             cursor.execute("""INSERT INTO authors (author_id, author_name)
                 VALUES ('{}', '{}')""".format(author_id, author_name))
+
+        for word, word_count in total_words.items():
+            cursor.execute("""INSERT INTO total_words (word, word_count)
+                VALUES ('{}', '{}')""".format(word, word_count)
+                
         for author_id, authors_words in personal_words.items():
             for word, word_count in authors_words.items():
                 cursor.execute("""INSERT INTO personal_words (author_id,
