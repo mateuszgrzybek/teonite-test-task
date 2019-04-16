@@ -1,7 +1,7 @@
 import sys, os
 import psycopg2
 
-from scrap import get_soup_pot, get_authors, get_words, words_per_author
+from scrap import get_soup_pot, get_authors, get_words, words_per_author, total_words
 
 # db_params = {'database': os.environ.get('DB_NAME', ''),
 #              'host': os.environ.get('DB_HOST', ''),
@@ -23,7 +23,7 @@ authors = get_authors(soup_pot)
 def connect(db_params, authors, soup_pot):
     words = get_words(authors, soup_pot)
     personal_words = words_per_author(words)
-    total_words = total_words(words)
+    total_wordcount = total_words(words)
     conn = None
     try:
         # connect to the database
@@ -33,7 +33,7 @@ def connect(db_params, authors, soup_pot):
         # create a cursor
         cursor = conn.cursor()
 
-        # delete any existing records
+        # delete any existing records to avoid mixing up stats
         cursor.execute('DELETE FROM authors')
         cursor.execute('DELETE FROM personal_words')
         cursor.execute('DELETE FROM total_words')
@@ -43,10 +43,10 @@ def connect(db_params, authors, soup_pot):
             cursor.execute("""INSERT INTO authors (author_id, author_name)
                 VALUES ('{}', '{}')""".format(author_id, author_name))
 
-        for word, word_count in total_words.items():
+        for word, word_count in total_wordcount.items():
             cursor.execute("""INSERT INTO total_words (word, word_count)
-                VALUES ('{}', '{}')""".format(word, word_count)
-                
+                VALUES ('{}', '{}')""".format(word, word_count))
+
         for author_id, authors_words in personal_words.items():
             for word, word_count in authors_words.items():
                 cursor.execute("""INSERT INTO personal_words (author_id,
