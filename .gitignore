@@ -6,4 +6,4 @@ api/venv
 web-scraper/__pycache__
 api/app/__pycache__
 api/app/migrations/__pycache__
-api/app/rest_api/__pycache__
+api/rest_api/__pycache__
