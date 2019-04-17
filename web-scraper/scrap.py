@@ -154,11 +154,3 @@ def total_words(personal_words):
 
     return dict((tuple[0], tuple[1])
         for tuple in Counter(all_words).most_common(10))
-
-# soup_pot = get_soup_pot()
-# authors = get_authors(soup_pot)
-# personal_words = get_words(authors, soup_pot)
-# words_per_author = words_per_author(personal_words)
-# all_words = total_words(personal_words)
-# # print(all_words)
-# print(words_per_author)
