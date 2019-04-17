@@ -10,11 +10,11 @@ from scrap import get_soup_pot, get_authors, get_words, words_per_author, total_
 #              'port': os.environ.get('DB_PORT', ''),
 #             }
 # development psql params
-db_params = {'database': 'restapidevelopment',
-             'host': 'localhost',
-             'user': 'mateuszgrzybek',
-             'password': '',
-             'port': '',
+db_params = {'database': os.environ.get('DB_NAME', ''),
+             'host': os.environ.get('DB_HOST', ''),
+             'user': os.environ.get('DB_USER', ''),
+             'password': os.environ.get('DB_PASSWORD', ''),
+             'port': os.environ.get('DB_PORT', ''),
             }
 
 soup_pot = get_soup_pot()

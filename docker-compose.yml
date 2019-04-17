@@ -30,9 +30,15 @@ services:
       SECRET_KEY: not_so_secret_key
 
   web-scraper:
-    restart: on-failure
+    restart: always
     build: ./web-scraper
     container_name: web-scraper
     depends_on:
       - database
       - rest-api
+    environment:
+      DB_NAME: teonite
+      DB_HOST: postgres
+      DB_USER: teonite
+      DB_PASSWORD: teonite321
+      DB_PORT: 5432
