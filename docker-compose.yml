@@ -1,0 +1,29 @@
+version: '3.2'
+
+services:
+  database:
+    image: postgres:9.6
+    restart: always
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: teonite321
+      POSTGRES_USER: teonite
+
+  rest-api:
+    restart: always
+    build: ./api
+    container_name: rest-api
+    depends_on:
+      - database
+    ports:
+      - "8080:8080"
+
+  web-scraper:
+    restart: on-failure
+    build: ./web-scraper
+    container_name: web-scraper
+    depends_on:
+      - database
+      - rest-api

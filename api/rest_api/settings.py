@@ -25,8 +25,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ALLOWED_HOSTS = []
 # DEBUG_ENV = os.environ.get('DEBUG_VAR', '')
 DEBUG = True
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'l=za4x4@!9ik+e#-3&r)3_$+my+ozlnu!8uj^q1ca#pjf7rw41'
