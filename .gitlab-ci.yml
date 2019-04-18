@@ -17,4 +17,5 @@ docker push:
     - master
   script:
     - echo "$REGISTRY_PASSWORD" | docker login -u "$REGISTRY_USER" --password-stdin
-    - docker push sveppur/teonite-test-task
+    - docker push sveppur/web-scraper
+    - docker push sveppur/rest-api
