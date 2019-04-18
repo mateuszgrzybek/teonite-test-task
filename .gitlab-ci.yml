@@ -7,4 +7,4 @@ docker build:
   stage: build image
   script:
     - docker info
-    - docker build -t web-scraper .
+    - docker build -t web-scraper ./web-scaper
