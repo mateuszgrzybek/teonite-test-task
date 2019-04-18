@@ -1,15 +1,11 @@
 image: docker:stable
 
 stages:
-  - build web-scraper image
-  - build rest-api image
+  - build image
 
 docker build:
-  stage: build web-scraper image
+  stage: build image
   script:
     - docker info
     - docker build -t web-scraper ./web-scraper
-
-  stage: build rest-api image
-  script:
     - docker build -t rest-api ./api
