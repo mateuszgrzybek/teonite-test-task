@@ -1,5 +1,7 @@
 from requests import get
 from bs4 import BeautifulSoup
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
 
 from contextlib import closing
 from collections import Counter
@@ -119,7 +121,7 @@ def get_words(authors, soup_pot):
                 words_raw.append(header.replace('\n', ' ').split())
                 paragraphs = soup.find('section', class_='post-content').text
                 words_raw.append(paragraphs.replace('\n', ' ').split())
-        words = [str(word) for sublist in words_raw for word in sublist]
+        words = [str(word.lower()) for sublist in words_raw for word in sublist]
         personal_words[k] = word_cleanup(words)
 
     return dict((k.lower().replace(' ', ''), v)

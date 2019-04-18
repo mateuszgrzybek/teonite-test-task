@@ -1,0 +1,10 @@
+image: docker:stable
+
+stages:
+  - build image
+
+docker build:
+  stage: build image
+  script:
+    - docker info
+    - docker build -t web-scraper .
