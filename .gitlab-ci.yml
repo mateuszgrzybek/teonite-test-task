@@ -2,6 +2,7 @@ image: docker:stable
 
 stages:
   - build image
+  - push to dockerhub
 
 docker build:
   stage: build image
@@ -9,3 +10,11 @@ docker build:
     - docker info
     - docker build -t web-scraper ./web-scraper
     - docker build -t rest-api ./api
+
+docker push:
+  stage: push to dockerhub
+  only:
+    - master
+  script:
+    - echo "$REGISTRY_PASSWORD" | docker login -u "$REGISTRY_USER" --password-stdin
+    - docker push sveppur/teonite-test-task
