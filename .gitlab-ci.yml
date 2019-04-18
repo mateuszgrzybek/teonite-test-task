@@ -8,8 +8,8 @@ docker build:
   stage: build image
   script:
     - docker info
-    - docker build -t web-scraper ./web-scraper
-    - docker build -t rest-api ./api
+    - docker build -t sveppur/web-scraper ./web-scraper
+    - docker build -t sveppur/rest-api ./api
 
 docker push:
   stage: push to dockerhub
