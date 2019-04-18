@@ -28,9 +28,10 @@ services:
       ALLOWED_HOST: '*'
       DEBUG: 'False'
       SECRET_KEY: not_so_secret_key
+      WAIT_HOSTS: database:5432
 
   web-scraper:
-    restart: always
+    restart: on-failure
     build: ./web-scraper
     container_name: web-scraper
     depends_on:
@@ -42,3 +43,4 @@ services:
       DB_USER: teonite
       DB_PASSWORD: teonite321
       DB_PORT: 5432
+      WAIT_HOSTS: rest-api:8080

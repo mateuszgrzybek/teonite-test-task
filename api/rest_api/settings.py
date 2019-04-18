@@ -18,9 +18,7 @@ DB_PORT = os.environ.get('DB_PORT', '')
 ALLOWED_HOST = os.environ.get('ALLOWED_HOST', '')
 ALLOWED_HOSTS = [ALLOWED_HOST]
 DEBUG = os.environ.get('DEBUG', '')
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'l=za4x4@!9ik+e#-3&r)3_$+my+ozlnu!8uj^q1ca#pjf7rw41'
+SECRET_KEY = os.environ.get('SECRET_KEY', '')
 
 # Application definition
 

@@ -9,7 +9,11 @@ RUN pip3 install -r requirements.txt
 
 ADD . /app
 
-CMD python manage.py migrate && \
+ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.5.0/wait /wait
+RUN chmod +x /wait
+
+CMD /wait && \
+    python manage.py migrate && \
     python manage.py makemigrations && \
     python manage.py migrate && \
     python manage.py runserver 0.0.0.0:8080
