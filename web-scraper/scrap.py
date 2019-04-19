@@ -5,12 +5,14 @@ from contextlib import closing
 from collections import Counter
 import string
 
+
 def is_good_response(response):
     """Check if the given url appears to be an html doctype and check the
     status code returned with the response.
     """
     return(response.status_code == 200,
            response.text.find('html'))
+
 
 def get_url(url):
     """Get the page's html code."""
@@ -20,6 +22,7 @@ def get_url(url):
             return response.text
         else:
             print('Invalid data.')
+
 
 def get_articles():
     """Get urls of all articles found on the first page and all consecutive
@@ -58,13 +61,15 @@ def get_articles():
 
     return article_urls
 
+
 def get_soup_pot():
     """Create a list with the contents of each article's page."""
     article_urls = get_articles()
     soup_pot = [BeautifulSoup(get_url(url), 'html.parser')
-        for url in article_urls]
+                for url in article_urls]
 
     return soup_pot
+
 
 def get_authors(soup_pot):
     """Extract the author's name from each article."""
@@ -79,6 +84,7 @@ def get_authors(soup_pot):
 
     return dict(zip(author_ids, unique_authors))
 
+
 def word_cleanup(words):
     """Clean up the extracted words, removing any unnecessary punctuation
     and unmeaningful words.
@@ -86,7 +92,7 @@ def word_cleanup(words):
     # a mapping table to create replacement pairs
     mapping_table = str.maketrans('', '', string.punctuation)
     stop_words = ['i', 'oraz', 'lub', 'w', 'z', 'a', 'and', 'but', 'or', 'the',
-        'of', 'to']
+                  'of', 'to']
 
     stripped = [word.translate(mapping_table) for word in words]
 
@@ -103,12 +109,13 @@ def word_cleanup(words):
 
     return stripped
 
+
 def get_words(authors, soup_pot):
     """Get each authors words from all the articles written by them."""
-    author_names = [v for k,v in authors.items()]
+    author_names = [v for k, v in authors.items()]
     personal_words = dict.fromkeys(author_names)
 
-    for k,v in personal_words.items():
+    for k, v in personal_words.items():
         words_raw = []
         for soup in soup_pot:
             author_container = soup.find('span', class_='author-content')
@@ -119,17 +126,19 @@ def get_words(authors, soup_pot):
                 words_raw.append(header.replace('\n', ' ').split())
                 paragraphs = soup.find('section', class_='post-content').text
                 words_raw.append(paragraphs.replace('\n', ' ').split())
-        words = [str(word.lower()) for sublist in words_raw for word in sublist]
+        words = [str(word.lower()) for sublist in words_raw
+                 for word in sublist]
         personal_words[k] = word_cleanup(words)
 
     return dict((k.lower().replace(' ', ''), v)
-        for k, v in personal_words.items())
+                for k, v in personal_words.items())
+
 
 def words_per_author(personal_words):
     """Return a dictionary containing top 10 words for each author."""
     # an empty dict to store authors and their top words with their count
     words_per_author = dict()
-    for k,v in personal_words.items():
+    for k, v in personal_words.items():
         # create a Counter type dictionary to store the wordcount
         word_count = Counter()
         for word in v:
@@ -137,7 +146,7 @@ def words_per_author(personal_words):
         # use Counter's most_common() method to get the 10 most occuring words
         words_per_author[k] = word_count.most_common(10)
 
-    for k,v in words_per_author.items():
+    for k, v in words_per_author.items():
         # this loop basically converts the lists of tuples in values to simple
         # dicts
         word_count = dict()
@@ -147,10 +156,11 @@ def words_per_author(personal_words):
 
     return words_per_author
 
+
 def total_words(personal_words):
     """Return a dictionary containing top 10 words on the blog."""
     # combine each author's words to one huge list
-    all_words = [word for k,v in personal_words.items() for word in v]
+    all_words = [word for k, v in personal_words.items() for word in v]
 
     return dict((tuple[0], tuple[1])
-        for tuple in Counter(all_words).most_common(10))
+                for tuple in Counter(all_words).most_common(10))

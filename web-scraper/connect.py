@@ -1,17 +1,22 @@
-import sys, os
+import os
 import psycopg2
 
-from scrap import get_soup_pot, get_authors, get_words, words_per_author, total_words
+from scrap import get_soup_pot
+from scrap import get_authors
+from scrap import get_words
+from scrap import words_per_author
+from scrap import total_words
 
 db_params = {'database': os.environ.get('DB_NAME', ''),
              'host': os.environ.get('DB_HOST', ''),
              'user': os.environ.get('DB_USER', ''),
              'password': os.environ.get('DB_PASSWORD', ''),
              'port': os.environ.get('DB_PORT', ''),
-            }
+             }
 
 soup_pot = get_soup_pot()
 authors = get_authors(soup_pot)
+
 
 def connect(db_params, authors, soup_pot):
     words = get_words(authors, soup_pot)
@@ -55,6 +60,7 @@ def connect(db_params, authors, soup_pot):
         if conn is not None:
             conn.close()
             print('Connection closed.')
+
 
 if __name__ == "__main__":
     connect(db_params, authors, soup_pot)
