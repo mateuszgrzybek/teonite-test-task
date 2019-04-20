@@ -91,23 +91,16 @@ def word_cleanup(words):
     """
     # a mapping table to create replacement pairs
     mapping_table = str.maketrans('', '', string.punctuation)
-    stop_words = ['i', 'oraz', 'lub', 'w', 'z', 'a', 'and', 'but', 'or', 'the',
-                  'of', 'to']
+    stop_words = ['i', 'oraz', 'lub', 'w', 'z', 'się', 'a', 'and', 'but', 'or',
+                  'the', 'of', 'to', 'in', 'we', 'me', 'you', 'for', 'on', 'is',
+                  'is', 'it', 'are', 'that', 'this', 'was', 'with']
 
     stripped = [word.translate(mapping_table) for word in words]
 
-    for word in stripped:
-        for stop_word in stop_words:
-            if stop_word == word:
-                stripped.remove(word)
+    filtered = [word for word in stripped if word not in stop_words
+                and len(word)>2]
 
-    for word in stripped:
-        if len(word) < 2:
-            stripped.remove(word)
-        elif word.startswith('http'):
-            stripped.remove(word)
-
-    return stripped
+    return filtered
 
 
 def get_words(authors, soup_pot):
