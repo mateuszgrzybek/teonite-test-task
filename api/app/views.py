@@ -1,9 +1,10 @@
-from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.generics import ListAPIView
+
 from .models import Authors, WordsPerAuthor, TotalWords
 from .serializers import AuthorsSerializer, WordsPerAuthorSerializer, \
     TotalWordsSerializer
+
 
 class AuthorsView(ListAPIView):
     """View for listing author_id:author_name pairs."""
@@ -21,6 +22,7 @@ class AuthorsView(ListAPIView):
 
         return Response(authors_json)
 
+
 class TotalWordsView(ListAPIView):
     """View for listing word:word_count pairs."""
     serializer_class = TotalWordsSerializer
@@ -36,6 +38,7 @@ class TotalWordsView(ListAPIView):
             total_json[word['word']] = word['word_count']
 
         return Response(total_json)
+
 
 class WordsPerAuthorView(ListAPIView):
     """View for listing word:word_count pairs for each author. View filtered

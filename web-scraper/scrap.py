@@ -1,9 +1,9 @@
-from requests import get
-from bs4 import BeautifulSoup
-
+import string
 from contextlib import closing
 from collections import Counter
-import string
+
+from requests import get
+from bs4 import BeautifulSoup
 
 
 def is_good_response(response):

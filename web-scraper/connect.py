@@ -1,12 +1,11 @@
 import os
+
 import psycopg2
 
-from scrap import get_soup_pot
-from scrap import get_authors
-from scrap import get_words
-from scrap import words_per_author
-from scrap import total_words
+from scrap import get_soup_pot, get_authors, get_words, words_per_author, \
+    total_words
 
+# environmental variables for database connection
 db_params = {'database': os.environ.get('DB_NAME', ''),
              'host': os.environ.get('DB_HOST', ''),
              'user': os.environ.get('DB_USER', ''),
@@ -19,6 +18,8 @@ authors = get_authors(soup_pot)
 
 
 def connect(db_params, authors, soup_pot):
+    """Try to connect to the PostgreSQL database, delete existing records and
+    insert all the scraped stats."""
     words = get_words(authors, soup_pot)
     personal_words = words_per_author(words)
     total_wordcount = total_words(words)
