@@ -1,4 +1,5 @@
 # Teonite test task
+[![pipeline status](https://gitlab.com/mateuszgrzybek/teonite-test-task/badges/master/pipeline.svg)](https://gitlab.com/mateuszgrzybek/teonite-test-task/commits/master)
 
 Web-scraper for extracting words from https://teonite.com/blog/, storing them in a PostgreSQL DB, and presenting them as stats via Django based REST API. Based on Docker.  
 
@@ -6,8 +7,9 @@ Web-scraper for extracting words from https://teonite.com/blog/, storing them in
 
 ## tl;dr
 
-1. Navigate to the repo's root directory
-2. Run:
+1. Clone this repository
+2. Navigate to the repo's root directory
+3. Run:
 ```
 on macOS:
 docker-compose up
@@ -15,9 +17,9 @@ docker-compose up
 on linux:
 sudo docker-compose up
 ```
-3. Wait for docker to pull all the necessary dependencies and build the images.
-4. Watch containers run (web-scraper may take a short while (averaging 39 seconds) to do it's job, please be patient).
-5. After web-scraper is done with it's task, the app is ready to be used on local port 8080.  
+4. Wait for docker to pull all the necessary dependencies and build the images.
+5. Watch containers run (web-scraper may take a short while (averaging 39 seconds) to do it's job, please be patient).
+6. After web-scraper is done with it's task, the app is ready to be used on local port 8080.  
 You can access the json docs via browsable api or by running `curl` commands such as:
 
 ```
@@ -27,7 +29,7 @@ curl http://localhost:8080/stats/robertolejnik/
 curl http://localhost:8080/stats/michałgryczka/
 etc.
 ```
-6. You can also enable CI for this repository, by running `docker-compose up -d` within the `gitlab-runner` directory.
+7. You can also enable CI for this repository, by running `docker-compose up -d` within the `gitlab-runner` directory.
 See **GitLab CI** paragraph of this readme.
 
 ## General app info
