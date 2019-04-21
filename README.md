@@ -1,4 +1,5 @@
 # Teonite test task
+[![pipeline status](https://gitlab.com/mateuszgrzybek/teonite-test-task/badges/master/pipeline.svg)](https://gitlab.com/mateuszgrzybek/teonite-test-task/commits/master)
 
 Web-scraper for extracting words from https://teonite.com/blog/, storing them in a PostgreSQL DB, and presenting them as stats via Django based REST API. Based on Docker.  
 
@@ -6,8 +7,9 @@ Web-scraper for extracting words from https://teonite.com/blog/, storing them in
 
 ## tl;dr
 
-1. Navigate to the repo's root directory
-2. Run:
+1. Clone this repository
+2. Navigate to the repo's root directory
+3. Run:
 ```
 on macOS:
 docker-compose up
@@ -15,10 +17,11 @@ docker-compose up
 on linux:
 sudo docker-compose up
 ```
-3. Wait for docker to pull all the necessary dependencies and build the images.
-4. Watch containers run (web-scraper may take a short while to do it's job, please be patient).
-5. After web-scraper is done with it's task, the app is ready to be used on local port 8080.  
+4. Wait for docker to pull all the necessary dependencies and build the images.
+5. Watch containers run (web-scraper may take a short while (averaging 39 seconds) to do it's job, please be patient).
+6. After web-scraper is done with it's task, the app is ready to be used on local port 8080.  
 You can access the json docs via browsable api or by running `curl` commands such as:
+
 ```
 curl http://localhost:8080/authors/
 curl http://localhost:8080/stats/
@@ -26,6 +29,8 @@ curl http://localhost:8080/stats/robertolejnik/
 curl http://localhost:8080/stats/michałgryczka/
 etc.
 ```
+7. You can also enable CI for this repository, by running `docker-compose up -d` within the `gitlab-runner` directory.
+See **GitLab CI** paragraph of this readme.
 
 ## General app info
 
@@ -36,8 +41,8 @@ etc.
    of the blog looking for it's article urls and each next page's url.  
    * After extracting all the urls, it processes the data found on each article's page.  
    * The stats are being calculated within the scraper, before being inserted into the database.  
-   * All the scraped words should have special characters and punctuation removed. There also shouldn't be any urls or stop words  
-   (see: `word_cleanup(words)` in `web-scraper/scrap.py`)  
+   * All the scraped words should have special characters and punctuation removed. There also shouldn't be any stop words  
+   (see: `word_cleanup(words)` in `web-scraper/scrap.py` and `stop_words.json` in `web-scraper/`)  
    * Dockerfile based on python:3.6 image
 
 2. **PostgreSQL database**
