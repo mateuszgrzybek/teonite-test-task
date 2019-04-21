@@ -1,4 +1,5 @@
 import string
+import json
 from contextlib import closing
 from collections import Counter
 
@@ -91,14 +92,14 @@ def word_cleanup(words):
     """
     # a mapping table to create replacement pairs
     mapping_table = str.maketrans('', '', string.punctuation)
-    stop_words = ['i', 'oraz', 'lub', 'w', 'z', 'się', 'a', 'and', 'but', 'or',
-                  'the', 'of', 'to', 'in', 'we', 'me', 'you', 'for', 'on', 'is',
-                  'is', 'it', 'are', 'that', 'this', 'was', 'with']
+
+    with open('stop_words.json', 'r') as read_file:
+        stop_words = json.load(read_file)
 
     stripped = [word.translate(mapping_table) for word in words]
 
     filtered = [word for word in stripped if word not in stop_words
-                and len(word)>2]
+                and len(word) > 2]
 
     return filtered
 
