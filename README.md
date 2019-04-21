@@ -86,6 +86,9 @@ There are two defined stages in the `.gitlab-ci.yml` file. First one is responsi
 If the job passes, the second stage begins. It's main goal is to push the created images to author's dockerhub.  
 If both jobs pass, the commit also gets marked as passed.  
 
+**NOTE: The GitLab CI is configured to use two environment variables - REGISTRY_USER and REGISTRY_PASSWORD, both of them being your Dockerhub login credentials.**  
+**In order for everything to work seamlessly it is required that these variables are defined in GitLab's settings (CI/CD/Variables).**  
+
 ## App's workflow
 
 1. `docker-compose up` reads `docker-compose.yml` and builds all defined services in the way described in *Docker config*;
@@ -102,4 +105,3 @@ curl http://localhost:8080/stats/michałgryczka/
 etc.
 ```
 or via browsable api, which can be accessed by simply entering the above urls into the browser.
-
