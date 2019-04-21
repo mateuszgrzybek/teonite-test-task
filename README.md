@@ -16,9 +16,10 @@ on linux:
 sudo docker-compose up
 ```
 3. Wait for docker to pull all the necessary dependencies and build the images.
-4. Watch containers run (web-scraper may take a short while to do it's job, please be patient).
+4. Watch containers run (web-scraper may take a short while (averaging 39 seconds) to do it's job, please be patient).
 5. After web-scraper is done with it's task, the app is ready to be used on local port 8080.  
 You can access the json docs via browsable api or by running `curl` commands such as:
+
 ```
 curl http://localhost:8080/authors/
 curl http://localhost:8080/stats/
@@ -26,6 +27,8 @@ curl http://localhost:8080/stats/robertolejnik/
 curl http://localhost:8080/stats/michałgryczka/
 etc.
 ```
+6. You can also enable CI for this repository, by running `docker-compose up -d` within the `gitlab-runner` directory.
+See **GitLab CI** paragraph of this readme.
 
 ## General app info
 
@@ -36,8 +39,8 @@ etc.
    of the blog looking for it's article urls and each next page's url.  
    * After extracting all the urls, it processes the data found on each article's page.  
    * The stats are being calculated within the scraper, before being inserted into the database.  
-   * All the scraped words should have special characters and punctuation removed. There also shouldn't be any urls or stop words  
-   (see: `word_cleanup(words)` in `web-scraper/scrap.py`)  
+   * All the scraped words should have special characters and punctuation removed. There also shouldn't be any stop words  
+   (see: `word_cleanup(words)` in `web-scraper/scrap.py` and `stop_words.json` in `web-scraper/`)  
    * Dockerfile based on python:3.6 image
 
 2. **PostgreSQL database**
