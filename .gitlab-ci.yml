@@ -8,8 +8,8 @@ docker build:
   stage: build image
   script:
     - docker info
-    - docker build -t sveppur/web-scraper ./web-scraper
-    - docker build -t sveppur/rest-api ./api
+    - docker build -t "$REGISTRY_USER"/web-scraper ./web-scraper
+    - docker build -t "$REGISTRY_USER"/rest-api ./api
 
 docker push:
   stage: push to dockerhub
@@ -17,5 +17,5 @@ docker push:
     - master
   script:
     - echo "$REGISTRY_PASSWORD" | docker login -u "$REGISTRY_USER" --password-stdin
-    - docker push sveppur/web-scraper
-    - docker push sveppur/rest-api
+    - docker push "$REGISTRY_USER"/web-scraper
+    - docker push "$REGISTRY_USER"/rest-api
