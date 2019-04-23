@@ -29,6 +29,7 @@ def get_articles():
     """Get urls of all articles found on the first page and all consecutive
     pages.
     """
+    print('Extracting article urls...')
     domain = 'https://teonite.com/blog/'
     # find all the article tags from the first page
     soup = BeautifulSoup(get_url(domain), 'html.parser')
@@ -74,6 +75,7 @@ def get_soup_pot():
 
 def get_authors(soup_pot):
     """Extract the author's name from each article."""
+    print('Extracting author names...')
     authors = []
     for soup in soup_pot:
         author_container = soup.find('span', class_='author-content')
@@ -90,14 +92,16 @@ def word_cleanup(words):
     """Clean up the extracted words, removing any unnecessary punctuation
     and unmeaningful words.
     """
-    # a mapping table to create replacement pairs
+    # a mapping table to create punctuation replacement pairs
     mapping_table = str.maketrans('', '', string.punctuation)
 
+    # load stop words list from json file
     with open('stop_words.json', 'r') as read_file:
         stop_words = json.load(read_file)
 
     stripped = [word.translate(mapping_table) for word in words]
 
+    # a new list to store only meaningful words
     filtered = [word for word in stripped if word not in stop_words
                 and len(word) > 2]
 
@@ -106,6 +110,7 @@ def word_cleanup(words):
 
 def get_words(authors, soup_pot):
     """Get each authors words from all the articles written by them."""
+    print('Extracting words...')
     author_names = [v for k, v in authors.items()]
     personal_words = dict.fromkeys(author_names)
 
