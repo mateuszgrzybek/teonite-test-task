@@ -1,7 +1,8 @@
 # Teonite test task
 [![pipeline status](https://gitlab.com/mateuszgrzybek/teonite-test-task/badges/master/pipeline.svg)](https://gitlab.com/mateuszgrzybek/teonite-test-task/commits/master)
 
-Web-scraper for extracting words from https://teonite.com/blog/, storing them in a PostgreSQL DB, and presenting them as stats via Django based REST API. Based on Docker.  
+Web-scraper for extracting words from https://teonite.com/blog/, storing them in a PostgreSQL DB, and presenting them as stats via Django based REST API.  
+Based on Docker and docker-compose.  
 
 **Tested on macOS Mojave 10.14.1 and Ubuntu 18.04 LTS**  
 
@@ -94,7 +95,7 @@ If both jobs pass, the pipeline gets marked as passing.
 ## App's workflow
 
 1. `docker-compose up` reads `docker-compose.yml` and builds all defined services in the way described in *Docker config*;
-2. Services start, but wait for each other
+2. Services start, but wait for each other:
    * **Postgres starts first**
    * **Django makes migrations** into it **and starts running on port 8080**;  
    * In the end **scraper gets all the data and inserts it into the database**, which can then be viewed via the api;
