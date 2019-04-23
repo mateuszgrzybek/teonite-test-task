@@ -7,8 +7,8 @@ Web-scraper for extracting words from https://teonite.com/blog/, storing them in
 
 ## tl;dr
 
-1. Clone this repository
-2. Navigate to the repo's root directory
+1. Clone this repository.
+2. Navigate to the repo's root directory.
 3. Run:
 ```
 on macOS:
@@ -19,7 +19,7 @@ sudo docker-compose up
 ```
 4. Wait for docker to pull all the necessary dependencies and build the images.
 5. Watch the containers run (web-scraper may take a short while (averaging 39 seconds) to do it's job, please be patient).
-6. After web-scraper is done with it's task, the app is ready to be used on local port 8080.  
+6. After web-scraper is done with it's task (it will exit with code 0), the app is ready to be used on local port 8080.  
 You can access the json docs via browsable api or by running `curl` commands such as:
 
 ```
@@ -29,7 +29,7 @@ curl http://localhost:8080/stats/robertolejnik/
 curl http://localhost:8080/stats/michałgryczka/
 etc.
 ```
-7. This repository also has GitLab CI enabled. See **GitLab CI** paragraph for reference.
+7. This repository also has GitLab CI enabled. See [**GitLab CI**](#gitlab-ci) paragraph for reference.
 
 ## General app info
 
@@ -39,7 +39,7 @@ etc.
    * Basic functionality relies on the scraper checking whether the provided website allows a connection. If it does, the script scrapes the first page of the blog looking for it's article urls and each next page's url. The process  repeats on each consecutive page.  
    * After extracting all the urls, it processes the data found on each article's page.  
    * The stats are being calculated within the scraper, before being inserted into the database.  
-   * All the scraped words should have special characters and punctuation removed. There also shouldn't be any stop words. The list of stop words can be manipulated at any time, by simply editing the list in json file.  
+   * All the scraped words should have special characters and punctuation removed. There also shouldn't be any stop words. **The list of stop words can be manipulated at any time**, by simply editing the list in json file.  
    (see: `word_cleanup(words)` in `web-scraper/scrap.py` and `stop_words.json` in `web-scraper/`)  
    * Dockerfile based on python:3.6 image
 
@@ -52,7 +52,7 @@ etc.
 
 3. **Django REST API**
    * The api is based on **Django** and **Django REST Framework** (DRF).
-   * Most of the files in the *api* directory were created automatically by running 'django-admin startproject' and 'python3 manage.py startapp'.
+   * Most of the files in the *api* directory were created automatically by running `django-admin startproject` and `python3 manage.py startapp`.
    * When the server is running, the app is available on local port 8080.
    * The api returns 3 types of a json document:
      * Authors of the blog posts and their id's at `/authors/` endpoint; ordered alphabetically; ids to be used in the `/stats/<author_id>/` endpoint;
@@ -62,7 +62,9 @@ etc.
 
 ## Docker config
 
-The app uses docker and docker-compose. Docker-compose divides the app into three separate services, which are being  built as images and then bound to containers. The services depend on each other as follows:  
+The app uses docker and docker-compose. Docker-compose divides the app into three separate services, which are being  built as images and then bound to containers.  
+Both *web-scraper* and *api* have their own Dockerfiles, which are used to build their images.  
+The services depend on each other as follows:  
 1. The **first** service to be built is the **PostgreSQL database**. It has no dependencies.  
 2. The **rest-api** is built next since it **depends on the database** (due to migrations that are supposed to create the tables).  
 3. The **last** piece of the app to be built is the **web-scraper**. Since it's job is to insert the data into the previously created tables, it's **dependencies contain both the database and rest-api**.
@@ -72,14 +74,16 @@ Adding waiting wasn't actually necessary since the app seemed to be running prop
 
 ## GitLab CI
 
-This app has a registered GitLab CI Runner, which lives in 'gitlab-runner' directory. In order for it to be able to run pipelines it has to be turned on locally via docker-compose.  
+This app has a registered GitLab CI Runner, which lives in *gitlab-runner* directory. In order for it to be able to run pipelines it has to be turned on locally via `docker-compose`.  
 To make it's magic possible, user has to navigate to the 'gitlab-runner' directory and run:
 ```
 docker-compose up -d
 ```
 After the runner is built, all changes that are commited and pushed to the GitLab remote will be checked by the pipeline.  
-There are two defined stages in the `.gitlab-ci.yml` file. First one is responsible for automatically building the docker images (`web-scraper` and `rest-api`).  
-If the job passes, the second stage begins. It's main goal is to push the created images to author's dockerhub.  
+There are two defined stages in the `.gitlab-ci.yml` file:
+1. Automatically building docker images for *web-scraper* and *api*.
+2. Pushing the created images to the author's DockerHub (only if the first job is succesful).
+
 If both jobs pass, the pipeline gets marked as passing.  
 
 **NOTE: The GitLab CI is configured to use two environment variables - REGISTRY_USER and REGISTRY_PASSWORD, both of them being Dockerhub login credentials.**  
@@ -90,10 +94,10 @@ If both jobs pass, the pipeline gets marked as passing.
 ## App's workflow
 
 1. `docker-compose up` reads `docker-compose.yml` and builds all defined services in the way described in *Docker config*;
-2. Services wait for each other
+2. Services start, but wait for each other
    * **Postgres starts first**
    * **Django makes migrations** into it **and starts running on port 8080**;  
-   * in the end **scraper gets all the data and inserts it into the database**, which can then be viewed via the api;
+   * In the end **scraper gets all the data and inserts it into the database**, which can then be viewed via the api;
 3. The app is ready to use. Desired json docs can be accessed either via `curl` commands such as:
 ```
 curl http://localhost:8080/authors/
