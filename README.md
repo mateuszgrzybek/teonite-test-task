@@ -85,7 +85,11 @@ There are two defined stages in the `.gitlab-ci.yml` file:
 1. Automatically building docker images for *web-scraper* and *api*.
 2. Pushing the created images to the author's DockerHub (only if the first job is succesful).
 
-If both jobs pass, the pipeline gets marked as passing.  
+If both jobs pass, the pipeline gets marked as passing.
+
+Dockerhub repositories:
+* [rest-api](https://cloud.docker.com/u/sveppur/repository/docker/sveppur/rest-api)
+* [web-scraper](https://cloud.docker.com/repository/docker/sveppur/web-scraper)
 
 **NOTE: The GitLab CI is configured to use two environment variables - REGISTRY_USER and REGISTRY_PASSWORD, both of them being Dockerhub login credentials.**  
 **In order for everything to work seamlessly it is required that these variables are defined in GitLab's settings (CI/CD/Variables).**
