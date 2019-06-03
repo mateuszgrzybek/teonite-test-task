@@ -8,5 +8,8 @@ api/app/__pycache__
 api/app/migrations/__pycache__
 api/rest_api/__pycache__
 
+# pycharm
+.idea/
+
 # mac files
 .DS_Store

@@ -51,20 +51,18 @@ def get_articles():
             current_page_container = soup.find('span', class_='page-number')
             current_page = current_page_container.text[:1]
             pagination = soup.find('ul', class_='pagination-list')
-            li_tags = pagination.find_all('li', class_='blog-button post-pagination')
+            li_tags = pagination.find_all(
+                'li', class_='blog-button post-pagination')
             next_url_tail = []
-            # print(li_tags)
             for li in li_tags:
                 href = li.a.get('href')
                 href_tail = href.replace('../', '').replace('blog/', '')
-                # print(href_tail)
                 try:
                     if int(href_tail[5]) > int(current_page):
                         next_url_tail.append(href_tail)
                 except ValueError:
                     pass
             next_url = ''.join([domain, next_url_tail[0]])
-            # print(next_url)
 
         except IndexError:
             break
@@ -73,11 +71,11 @@ def get_articles():
             soup = BeautifulSoup(get_url(next_url), 'html.parser')
             articles = soup.find_all('div', class_='post-container')
             for article in articles:
-                href = article.h2.a.get('href').replace('../', '').replace('blog/', '')
+                href = article.h2.a.get('href').replace('../', '').replace(
+                    'blog/', '')
                 article_url = ''.join([domain, href])
                 article_urls.append(article_url)
 
-    print(article_urls)
     return article_urls
 
 
@@ -102,7 +100,6 @@ def get_authors(soup_pot):
     unique_authors = list(set(authors))
     author_ids = [author.replace(' ', '').lower() for author in unique_authors]
 
-    # print(dict(zip(author_ids, unique_authors)))
     return dict(zip(author_ids, unique_authors))
 
 
@@ -136,11 +133,12 @@ def get_words(authors, soup_pot):
         words_raw = []
         for soup in soup_pot:
             author_container = soup.find('span', class_='author-name')
-            soup_author = author_container.strong.text
+            soup_author = author_container.text
             if k == soup_author:
                 # get words from header
                 header = soup.find('h1', class_='post-title').text
                 words_raw.append(header.replace('\n', ' ').split())
+                # get words from paragraphs
                 paragraphs = soup.find('div', class_='post-content').text
                 words_raw.append(paragraphs.replace('\n', ' ').split())
         words = [str(word.lower()) for sublist in words_raw

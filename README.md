@@ -3,6 +3,7 @@
 
 Web-scraper for extracting words from https://teonite.com/blog/, storing them in a PostgreSQL DB, and presenting them as stats via Django based REST API. Based on Docker.  
 
+**Updated accordingly to the blog's new html tags**
 **Tested on macOS Mojave 10.14.1 and Ubuntu 18.04 LTS**  
 
 ## tl;dr
